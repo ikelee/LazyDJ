@@ -1,0 +1,12 @@
+Process Chain for LazyDJ 
+
+1. Full analysis, metadata extraction
+2. Beat/Pitch detection 
+3. Path determintation, optimal tempo/key/pitch determination
+4. Render
+5. Display(?)
+
+Full analysis: 
+	madmom library -> beat detection using RNNDownBeatDetection, create numPy array of the matrix of downbeats 
+	metadata extraction -> librosa(?), used for pitch determination? 
+		- Consider other resources, as these options are okay at best 
