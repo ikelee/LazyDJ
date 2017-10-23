@@ -18,6 +18,8 @@ Estimated timeline:
   Nov 12, 2017: Be able to have a solution to finding which samples will work together
   Nov 19, 2017: Key switch determination algorithm in place 
   --To be determined as project progressed--
+
+Will be using camelCase, as I personally find it more legible and I personally believe it doesn't matter what convention you use as long as it's consistent
   
 As a personal pilot project, each benchmark will be documented by me in a log file, outlining achievements, roadblocks, etc. 
 

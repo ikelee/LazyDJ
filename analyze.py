@@ -11,28 +11,7 @@
 		-> vocal_harmony
 		-> misc 
 		instrumentals 
-'''
 
-import os
-from madmom.features import DBNDownBeatTrackingProcessor as mmDBProcessor, RNNDownBeatProcessor
-
-def analyze(top):
-	#ListOfFolders should be ['instrumentals', 'samples']
-
-	listUnderTop = filter(lambda link: str(link)[0] != '.', os.listdir(top))
-
-	if listUnderTop != ["instrumentals", "samples"]:
-		raise Exception("Error: incorrect folders under top level")
-
-	listUnderSamples = filter(lambda link: str(link)[0] != '.', os.listdir(top + "samples"))
-	listUnderInstrumentals = filter(lambda link: str(link)[0] != '.', os.listdir(top + "instrumentals"))
-
-
-	if listUnderSamples != ['bass', 'kick', 'misc', 'snare', 'synth', 'vocal_harmony', 'vocal_lead']: 
-		raise Exception("Error: incorrect folders under samples level")
-
-	sampleAnalysis = {}
-	'''
 	sampleAnalysis is a dictionary of all the stems existing in our data, under key "stemType", will be list of dictionaries of each stem with its data
 
 	samples = {
@@ -67,6 +46,13 @@ def analyze(top):
 
 	'''
 
+import os
+import thread 
+from madmom.features import DBNDownBeatTrackingProcessor as mmDBProcessor, RNNDownBeatProcessor
+
+def detectBeat(listUnderSamples, top): 
+	sampleAnalysis = {}
+
 	for folder in listUnderSamples: 
 		sampleAnalysis[folder] = {}
 		stemsUnderFolder = filter(lambda link: str(link)[0] != '.', os.listdir(top + "samples/" + str(folder)))
@@ -79,3 +65,23 @@ def analyze(top):
 			sampleAnalysis[folder][stem]["Beat"] = beatInfo
 
 	print sampleAnalysis
+
+def detectPitch(): 
+	
+
+def analyze(top):
+	#ListOfFolders should be ['instrumentals', 'samples']
+
+	listUnderTop = filter(lambda link: str(link)[0] != '.', os.listdir(top))
+
+	if listUnderTop != ["instrumentals", "samples"]:
+		raise Exception("Error: incorrect folders under top level")
+
+	listUnderSamples = filter(lambda link: str(link)[0] != '.', os.listdir(top + "samples"))
+	listUnderInstrumentals = filter(lambda link: str(link)[0] != '.', os.listdir(top + "instrumentals"))
+
+
+	if listUnderSamples != ['bass', 'kick', 'misc', 'snare', 'synth', 'vocal_harmony', 'vocal_lead']: 
+		raise Exception("Error: incorrect folders under samples level")
+
+	detectBeat(listUnderSamples, top)
