@@ -4,11 +4,12 @@ Project to use pre-organized library of WAV files of stems to create a new song 
 Project started on Oct 22, 2017. Minimum viable product distribution will tentatively start on Dec 31, 2017. 
 
 Project will use: 
-  Python 2.7.10
+  Python 2.7.14
   pyAudioAnalysis
   Aubio
   sciPy (specifically numPy)
   ffmPeg
+  Docker (for containerization later)
   
 Estimated timeline: 
   Oct 22, 2017: Start project, create outlines, workflow and schedule. 
