@@ -47,19 +47,20 @@
 	'''
 
 import os
+import threading
 from madmom.features import DBNDownBeatTrackingProcessor as mmDBProcessor, RNNDownBeatProcessor
 from madmom.features.chords import DeepChromaChordRecognitionProcessor
 from madmom.processors import SequentialProcessor
 from madmom.audio.chroma import DeepChromaProcessor
 from statistics import mode
 
-def detectBeat(listUnderSamples, top, folder, stem): 
+def detectBeat(listUnderSamples, top, folder, stem, sampleAnalysis): 
 	proc = mmDBProcessor(beats_per_bar=4, fps = 100)
 	beatInfo = proc(RNNDownBeatProcessor()(top + "samples/" + str(folder) + "/" + str(stem)))
 
-	return beatInfo
+	sampleAnalysis[folder][stem]["Beat"] = beatInfo
 
-def detectKey(listUnderSamples, top, folder, stem):
+def detectKey(listUnderSamples, top, folder, stem, sampleAnalysis):
 	dcp = DeepChromaProcessor()
 	decode = DeepChromaChordRecognitionProcessor()
 	chordrec = SequentialProcessor([dcp, decode])
@@ -68,7 +69,7 @@ def detectKey(listUnderSamples, top, folder, stem):
 
 	#TODO: map into keyInfo list and find the key
 
-	return keyInfo
+	sampleAnalysis[folder][stem]["Key"] = keyInfo
 
 def analyze(top):
 	#ListOfFolders should be ['instrumentals', 'samples']
@@ -82,7 +83,7 @@ def analyze(top):
 	listUnderInstrumentals = list(filter(lambda link: str(link)[0] != '.', os.listdir(top + "instrumentals")))
 
 	#TODO: Implement listUnderInstrumentals section
-
+ 
 
 	if listUnderSamples != ['bass', 'kick', 'misc', 'snare', 'synth', 'vocal_harmony', 'vocal_lead']: 
 		raise Exception("Error: incorrect folders under samples level")
@@ -95,10 +96,13 @@ def analyze(top):
 		for stem in stemsUnderFolder: 
 			sampleAnalysis[folder][stem] = {}
 
-			beatInfo = detectBeat(listUnderSamples, top, folder, stem)
-			keyInfo = detectKey(listUnderSamples, top, folder, stem)
+			findKey = threading.Thread( target = detectKey, args = (listUnderSamples, top, folder, stem, sampleAnalysis) )
+			findBeat = threading.Thread( target = detectBeat, args = (listUnderSamples, top, folder, stem, sampleAnalysis) )
 
-			sampleAnalysis[folder][stem]["Beat"] = beatInfo
-			sampleAnalysis[folder][stem]["Key"] = keyInfo
+			findKey.start()
+			findBeat.start()
+
+			findKey.join()
+			findBeat.join()
 
 	print(sampleAnalysis)
