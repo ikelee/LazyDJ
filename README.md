@@ -19,7 +19,7 @@ Estimated timeline:
   Nov 19, 2017: Key switch determination algorithm in place 
   --To be determined as project progressed--
   
-As a personal pilot project, each benchmark will be documented by me in a log file, outlining achievements, roadblocks, etc. 
+This project is currently halted in production. Update will come soon
 
 Will be using this Git library as a primary source of version control, will ensure transparent progression of the project by avoiding rewriting history on master (with the exception of squashing small fix commits), and using feature branches and pull requests. 
 
